@@ -1,0 +1,11 @@
+[project]
+name = "english-practice-tool"
+version = "0.1.0"
+description = "本地英语练习工具 - 听力与口语"
+requires-python = ">=3.10"
+dependencies = [
+    "pyside6>=6.7",
+]
+
+[project.scripts]
+ept = "main:main"
