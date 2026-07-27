@@ -9,9 +9,10 @@ from PySide6.QtWidgets import (
 )
 
 from components.nav_sidebar import NavSidebar
+from components.settings_dialog import SettingsDialog
 from pages.listening_page import ListeningPage
 from pages.speaking_page import SpeakingPage
-from styles import STYLESHEET
+from styles import theme
 
 
 class MainWindow(QMainWindow):
@@ -40,8 +41,16 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.stack, stretch=1)
 
         self.sidebar.page_changed.connect(self._switch_page)
+        self.sidebar.settings_requested.connect(self._open_settings)
+        theme.theme_changed.connect(self._apply_theme)
 
-        self.setStyleSheet(STYLESHEET)
+        self._apply_theme(theme.is_dark)
 
     def _switch_page(self, index: int):
         self.stack.setCurrentIndex(index)
+
+    def _open_settings(self):
+        SettingsDialog(self).exec()
+
+    def _apply_theme(self, dark: bool):
+        self.setStyleSheet(theme.stylesheet())

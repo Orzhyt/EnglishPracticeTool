@@ -1,12 +1,15 @@
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
+    QHBoxLayout,
     QLabel,
     QPushButton,
     QSizePolicy,
     QVBoxLayout,
     QWidget,
 )
+
+from styles import theme
 
 
 class NavButton(QPushButton):
@@ -21,6 +24,7 @@ class NavButton(QPushButton):
 
 class NavSidebar(QWidget):
     page_changed = Signal(int)
+    settings_requested = Signal()
 
     PAGES = [
         ("🎧  听力练习", 0),
@@ -58,7 +62,30 @@ class NavSidebar(QWidget):
 
         layout.addStretch()
 
+        bottom_row = QHBoxLayout()
+        bottom_row.setSpacing(4)
+
+        settings_btn = QPushButton("⚙  设置")
+        settings_btn.setObjectName("navButton")
+        settings_btn.setFixedHeight(36)
+        settings_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        settings_btn.clicked.connect(self.settings_requested.emit)
+        bottom_row.addWidget(settings_btn)
+
+        self.theme_btn = QPushButton("🌙")
+        self.theme_btn.setObjectName("themeToggleBtn")
+        self.theme_btn.setFixedSize(36, 36)
+        self.theme_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.theme_btn.clicked.connect(self._toggle_theme)
+        bottom_row.addWidget(self.theme_btn)
+
+        layout.addLayout(bottom_row)
+
         self.buttons[0].setChecked(True)
+
+    def _toggle_theme(self):
+        theme.toggle()
+        self.theme_btn.setText("☀️" if theme.is_dark else "🌙")
 
     def _on_click(self, index: int):
         for btn in self.buttons:
