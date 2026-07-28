@@ -5,3 +5,7 @@ __pycache__/
 *.spec.bak
 .idea/
 .venv/
+third_party/
+output/
+models/
+*.wav

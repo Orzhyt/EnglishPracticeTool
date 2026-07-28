@@ -19,6 +19,7 @@ class SpeakingPage(QWidget):
 
         title = QLabel("🎤 口语练习")
         title.setFont(QFont("Segoe UI", 22, QFont.Weight.Bold))
+        title.setObjectName("pageTitle")
         layout.addWidget(title)
 
         desc = QLabel("跟读模仿、录音对比、发音评分")
@@ -38,18 +39,9 @@ class SpeakingPage(QWidget):
         card_lay.setContentsMargins(24, 20, 24, 20)
         card_lay.setSpacing(12)
 
-        placeholder = QLabel("口语内容区域\n\n后续集成：录音采集、语音识别、发音评分等")
+        placeholder = QLabel("🚧 功能开发中，敬请期待…")
         placeholder.setAlignment(Qt.AlignmentFlag.AlignCenter)
         placeholder.setObjectName("placeholder")
         card_lay.addWidget(placeholder)
-
-        btn_row = QHBoxLayout()
-        btn_row.addStretch()
-        rec_btn = QPushButton("⏺  开始录音")
-        rec_btn.setFixedSize(140, 40)
-        rec_btn.setObjectName("primaryButton")
-        btn_row.addWidget(rec_btn)
-        btn_row.addStretch()
-        card_lay.addLayout(btn_row)
 
         parent_layout.addWidget(card)

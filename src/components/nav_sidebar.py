@@ -35,6 +35,7 @@ class NavSidebar(QWidget):
         super().__init__()
         self.setFixedWidth(200)
         self.setObjectName("sidebar")
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(12, 20, 12, 20)
