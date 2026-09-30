@@ -4,8 +4,9 @@ MD 格式规则：
 - ``---``  分隔不同题目
 - ``[M]``  标记男声说话（对话内容，用于生成音频）
 - ``[F]``  标记女声说话
-- ``A)`` / ``B)`` / ``C)`` / ``D)``  选项
-- ``Answer: X``  正确答案
+- 未标记的非空文本行默认视为女声（F）对话/独白正文
+- ``A)`` / ``B)`` / ``C)`` / ``D)``  选项行——不念，跳过
+- ``Answer: X``  正确答案——仅解析供 GUI 显示，不念
 - ``#``    开头为文档标题（不生成音频）
 - ``## Question N``  题目标题（不生成音频，用于命名输出文件）
 """
@@ -30,10 +31,8 @@ class Question:
     """一道听力题目。"""
 
     index: int  # 题号（从 1 开始）
-    dialogue_lines: list[SpeechLine] = field(default_factory=list)  # 对话内容（生成音频用）
-    question_text: str = ""  # 题目问题文本
-    options: list[str] = field(default_factory=list)  # 选项列表，如 ["A) ...", "B) ...", ...]
-    answer: str = ""  # 正确答案，如 "B"
+    dialogue_lines: list[SpeechLine] = field(default_factory=list)  # 对话/独白正文（生成音频用）
+    answer: str = ""  # 正确答案，如 "B"（仅供 GUI 显示，不念）
 
 
 @dataclass
@@ -114,11 +113,8 @@ def parse_listening_md(filepath: str | Path) -> ListeningDocument:
 
     for block in question_blocks:
         dialogue_lines: list[SpeechLine] = []
-        question_text = ""
-        options: list[str] = []
         answer = ""
         question_index = 0
-        in_question_text = False
 
         for line in block:
             stripped = line.strip()
@@ -135,29 +131,21 @@ def parse_listening_md(filepath: str | Path) -> ListeningDocument:
                 dialogue_lines.append(
                     SpeechLine(speaker=m_spk.group(1), text=m_spk.group(2).strip())
                 )
-                in_question_text = False
                 continue
 
-            # 检测选项 A) B) C) D)
-            m_opt = _RE_OPTION.match(stripped)
-            if m_opt:
-                options.append(f"{m_opt.group(1)}) {m_opt.group(2).strip()}")
-                in_question_text = False
+            # 选项 A) B) C) D) —— 不念，直接跳过
+            if _RE_OPTION.match(stripped):
                 continue
 
-            # 检测答案 Answer: X
+            # 答案 Answer: X —— 仅解析供 GUI 显示，不念
             m_ans = _RE_ANSWER.match(stripped)
             if m_ans:
                 answer = m_ans.group(1)
                 continue
 
-            # 其他非空文本 → 题目问题文本
+            # 其他非空文本 → 视为女声（F）对话/独白正文
             if stripped:
-                if question_text:
-                    question_text += " " + stripped
-                else:
-                    question_text = stripped
-                in_question_text = True
+                dialogue_lines.append(SpeechLine(speaker="F", text=stripped))
 
         # 如果没有从 ``## Question N`` 解析到题号，自动递增
         if question_index == 0:
@@ -166,8 +154,6 @@ def parse_listening_md(filepath: str | Path) -> ListeningDocument:
         q = Question(
             index=question_index,
             dialogue_lines=dialogue_lines,
-            question_text=question_text,
-            options=options,
             answer=answer,
         )
         doc.questions.append(q)

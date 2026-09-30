@@ -6,6 +6,5 @@ __pycache__/
 .idea/
 .venv/
 third_party/
-output/
 models/
 *.wav

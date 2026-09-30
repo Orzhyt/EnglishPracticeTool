@@ -63,29 +63,17 @@ class ListeningPage(QWidget):
         # 间隔设置
         pause_row = QHBoxLayout()
         pause_row.setSpacing(8)
-        lbl1 = QLabel("对话后间隔:")
+        lbl1 = QLabel("题目间隔:")
         lbl1.setObjectName("descLabel")
         pause_row.addWidget(lbl1)
-        self._pause1_input = QLineEdit("5")
-        self._pause1_input.setFixedWidth(50)
-        self._pause1_input.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self._pause1_input.setObjectName("pauseInput")
-        pause_row.addWidget(self._pause1_input)
+        self._pause_input = QLineEdit("20")
+        self._pause_input.setFixedWidth(50)
+        self._pause_input.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self._pause_input.setObjectName("pauseInput")
+        pause_row.addWidget(self._pause_input)
         lbl2 = QLabel("秒")
         lbl2.setObjectName("descLabel")
         pause_row.addWidget(lbl2)
-        pause_row.addSpacing(12)
-        lbl3 = QLabel("念题后间隔:")
-        lbl3.setObjectName("descLabel")
-        pause_row.addWidget(lbl3)
-        self._pause2_input = QLineEdit("10")
-        self._pause2_input.setFixedWidth(50)
-        self._pause2_input.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self._pause2_input.setObjectName("pauseInput")
-        pause_row.addWidget(self._pause2_input)
-        lbl4 = QLabel("秒")
-        lbl4.setObjectName("descLabel")
-        pause_row.addWidget(lbl4)
         pause_row.addStretch()
         gen_lay.addLayout(pause_row)
 
@@ -241,8 +229,7 @@ class ListeningPage(QWidget):
         self._worker = TTSWorker(
             md_file_path=self._md_path,
             output_path=output_path,
-            pause_after_dialogue=self._get_pause(self._pause1_input, 5),
-            pause_after_question=self._get_pause(self._pause2_input, 10),
+            pause_between_questions=self._get_pause(self._pause_input, 20),
         )
         self._worker.progress.connect(self._on_gen_progress)
         self._worker.finished.connect(self._on_gen_finished)

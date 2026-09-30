@@ -38,8 +38,7 @@ class TTSWorker(QThread):
         self,
         md_file_path: str,
         output_path: str,
-        pause_after_dialogue: float = 5.0,
-        pause_after_question: float = 10.0,
+        pause_between_questions: float = 20.0,
         model_dir: str | None = None,
         cosyvoice_repo_dir: str | None = None,
         prompt_male_path: str | None = None,
@@ -49,8 +48,7 @@ class TTSWorker(QThread):
         super().__init__(parent)
         self._md_file_path = md_file_path
         self._output_path = output_path
-        self._pause_after_dialogue = pause_after_dialogue
-        self._pause_after_question = pause_after_question
+        self._pause_between_questions = pause_between_questions
         self._model_dir = model_dir
         self._cosyvoice_repo_dir = cosyvoice_repo_dir
         self._prompt_male_path = prompt_male_path
@@ -73,7 +71,7 @@ class TTSWorker(QThread):
             # 2. 创建 TTS 生成器
             project_root = Path(__file__).resolve().parent.parent.parent
             model_dir = self._model_dir or str(
-                project_root / "models" / "CosyVoice3-0.5B"
+                project_root / "models" / "CosyVoice-300M"
             )
 
             tts = TTSGenerator(
@@ -90,8 +88,7 @@ class TTSWorker(QThread):
             wav_path = tts.generate_single_wav(
                 doc,
                 self._output_path,
-                pause_after_dialogue=self._pause_after_dialogue,
-                pause_after_question=self._pause_after_question,
+                pause_between_questions=self._pause_between_questions,
                 progress_callback=on_progress,
             )
 

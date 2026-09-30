@@ -5,7 +5,7 @@
 
 可选参数：
     --output-dir   输出目录（默认: output/listening/<md文件名>）
-    --model-dir    CosyVoice3 模型目录（默认: models/CosyVoice3-0.5B）
+    --model-dir    CosyVoice 模型目录（默认: models/CosyVoice-300M）
     --repo-dir     CosyVoice 仓库目录（默认: third_party/CosyVoice）
     --male-wav     男声参考音频路径
     --female-wav   女声参考音频路径
@@ -43,8 +43,8 @@ def main():
     )
     parser.add_argument(
         "--model-dir",
-        default=str(PROJECT_ROOT / "models" / "CosyVoice3-0.5B"),
-        help="CosyVoice3 模型目录",
+        default=str(PROJECT_ROOT / "models" / "CosyVoice-300M"),
+        help="CosyVoice 模型目录",
     )
     parser.add_argument(
         "--repo-dir",

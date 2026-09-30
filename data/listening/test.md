@@ -35,21 +35,3 @@ C) 11:30 from platform 3
 D) 9:15 from platform 1
 
 Answer: B
-
----
-
-## Question 3
-
-[M] I heard you got a new job. Congratulations!
-[F] Thanks! I'm really excited about it. I start next Monday.
-[M] What will you be doing?
-[F] I'll be working as a marketing manager at a tech company.
-
-What will the woman do next Monday?
-
-A) Start a new job as a marketing manager
-B) Go to an interview at a tech company
-C) Quit her current job
-D) Move to a new city
-
-Answer: A
